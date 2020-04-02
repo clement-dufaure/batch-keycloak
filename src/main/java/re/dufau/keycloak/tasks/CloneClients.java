@@ -67,7 +67,7 @@ public class CloneClients implements Tasklet {
             HashMap<String, Object> credentials = objectMapper
                     .readValue(httpClient.newCall(requestSecret).execute().body().string(), typeCredentials);
             String secret = (String) credentials.get("value");
-
+            
             // put secret and remove id
             client.put("secret", secret);
             client.remove("id");
@@ -80,6 +80,7 @@ public class CloneClients implements Tasklet {
                     .addPathSegment(realmExport).addPathSegment("clients").build();
             Request postClient = new Request.Builder().url(urlClientsExport).header("Authorization", "Bearer " + token)
                     .post(requestBody).build();
+            httpClient.newCall(postClient).execute();
         }
 
         return RepeatStatus.FINISHED;
